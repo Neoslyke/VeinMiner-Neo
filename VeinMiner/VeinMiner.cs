@@ -166,11 +166,6 @@ public class VeinMiner : TerrariaPlugin
         int count = vein.Count;
         string itemName = item.type == 0 ? "Unknown" : item.Name;
 
-        if (status?.ShowMessages == true && count > 1)
-        {
-            player.SendInfoMessage($"[VeinMiner] Mining {count} {itemName}...");
-        }
-
         if (Config.PutIntoInventory)
         {
             if (player.HasSpaceFor(item.type, count))
