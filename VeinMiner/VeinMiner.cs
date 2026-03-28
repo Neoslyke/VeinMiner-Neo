@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
 using TerrariaApi.Server;
 using TShockAPI;
 using TShockAPI.Hooks;
@@ -11,7 +12,7 @@ public class VeinMiner : TerrariaPlugin
 {
     public override string Name => "VeinMiner";
     public override string Author => "Neoslyke, Megghy, YSpoof, Maxthegreat99, 肝帝熙恩, Cai";
-    public override Version Version => new Version(2, 1, 0);
+    public override Version Version => new Version(2, 3, 0);
     public override string Description => "Mine entire ore veins at once.";
 
     public static Configuration Config { get; private set; } = new();
@@ -89,19 +90,70 @@ public class VeinMiner : TerrariaPlugin
         if (!Config.Enable) return;
 
         var tile = Main.tile[args.X, args.Y];
-        if (tile == null) return;
+        if (tile == null || !tile.active()) return;
 
         if (!args.Player.HasPermission("veinminer.use")) return;
 
         var status = args.Player.GetData<PlayerStatus>(DataKey);
         if (status == null || !status.Enabled) return;
 
+        // Check if tile is in target list
         if (!Config.TargetTiles.Contains(tile.type)) return;
 
         if (args.Action != GetDataHandlers.EditAction.KillTile || args.EditData != 0) return;
 
+        // Check if player can actually mine this tile (using Terraria's rules)
+        if (!CanPlayerMineTile(args.Player, tile.type))
+        {
+            return; // Let game handle normally
+        }
+
         args.Handled = true;
         MineVein(args.Player, args.X, args.Y, tile.type);
+    }
+
+    private static bool CanPlayerMineTile(TSPlayer player, int tileType)
+    {
+        int playerPickPower = GetBestPickaxePower(player);
+        int requiredPickPower = GetRequiredPickPower(tileType);
+
+        return playerPickPower >= requiredPickPower;
+    }
+
+    private static int GetRequiredPickPower(int tileType)
+    {
+        // Terraria's actual pickaxe power requirements
+        return tileType switch
+        {
+            TileID.Meteorite => 50,
+            TileID.Demonite => 55,
+            TileID.Crimtane => 55,
+            TileID.Obsidian => 65,
+            TileID.Hellstone => 65,
+            TileID.Cobalt => 100,
+            TileID.Palladium => 100,
+            TileID.Mythril => 110,
+            TileID.Orichalcum => 110,
+            TileID.Adamantite => 150,
+            TileID.Titanium => 150,
+            TileID.Chlorophyte => 200,
+            TileID.LihzahrdBrick => 210,
+            _ => 0 // No requirement for basic ores, gems, etc.
+        };
+    }
+
+    private static int GetBestPickaxePower(TSPlayer player)
+    {
+        int best = 0;
+        for (int i = 0; i < 58; i++)
+        {
+            var item = player.TPlayer.inventory[i];
+            if (item != null && item.pick > best)
+            {
+                best = item.pick;
+            }
+        }
+        return best;
     }
 
     private static void MineVein(TSPlayer player, int x, int y, int tileType)

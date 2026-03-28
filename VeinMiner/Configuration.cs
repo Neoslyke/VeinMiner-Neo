@@ -36,22 +36,41 @@ public class Configuration
                 {
                     TargetTiles = new List<int>
                     {
-                        // Ores
-                        TileID.Copper, TileID.Tin,
-                        TileID.Iron, TileID.Lead,
-                        TileID.Silver, TileID.Tungsten,
-                        TileID.Gold, TileID.Platinum,
-                        TileID.Meteorite, TileID.Demonite, TileID.Crimtane,
-                        TileID.Obsidian, TileID.Hellstone,
-                        TileID.Cobalt, TileID.Palladium,
-                        TileID.Mythril, TileID.Orichalcum,
-                        TileID.Adamantite, TileID.Titanium,
-                        TileID.Chlorophyte, TileID.LunarOre,
+                        // Basic Ores
+                        TileID.Copper,
+                        TileID.Tin,
+                        TileID.Iron,
+                        TileID.Lead,
+                        TileID.Silver,
+                        TileID.Tungsten,
+                        TileID.Gold,
+                        TileID.Platinum,
+
+                        // Pre-Hardmode Ores
+                        TileID.Meteorite,
+                        TileID.Demonite,
+                        TileID.Crimtane,
+                        TileID.Obsidian,
+                        TileID.Hellstone,
+
+                        // Hardmode Ores
+                        TileID.Cobalt,
+                        TileID.Palladium,
+                        TileID.Mythril,
+                        TileID.Orichalcum,
+                        TileID.Adamantite,
+                        TileID.Titanium,
+                        TileID.Chlorophyte,
+
                         // Gems
                         TileID.ExposedGems,
-                        TileID.Amethyst, TileID.Topaz,
-                        TileID.Sapphire, TileID.Emerald,
-                        TileID.Ruby, TileID.Diamond,
+                        TileID.Amethyst,
+                        TileID.Topaz,
+                        TileID.Sapphire,
+                        TileID.Emerald,
+                        TileID.Ruby,
+                        TileID.Diamond,
+
                         // Other
                         TileID.DesertFossil
                     },
